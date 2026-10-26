@@ -3,8 +3,8 @@
 A small 8-bit CPU designed in Verilog, with a 5-stage pipeline, hardware hazard handling,
 a Python assembler and automatic tests. It was simulated and implemented with Xilinx Vivado.
 
-**Author:** `<your name>`
-**Internship / program:** `<name>`
+**Author:** `Than Nguyen Minh Nguyen`
+
 **Tools:** Verilog, Vivado 2026.1, Icarus Verilog, Python 3
 
 ## Overview
