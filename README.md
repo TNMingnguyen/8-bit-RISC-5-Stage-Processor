@@ -130,15 +130,3 @@ python3 sw/random_test.py 500
 
 Result: `500 random programs: RTL matches golden model in all cases`.
 
-**A bug found this way:** the carry flag after `SHR` was always 0, but it should be the bit
-shifted out. The main test did not notice it because later instructions overwrote the flag.
-The random test did. Fixed in `rtl/alu.v`:
-
-```verilog
-SHR : result = {a[0], 1'b0, a[7:1]};   // C = old bit 0
-```
-
-Notes: the script needs Icarus Verilog (`iverilog`, `vvp`) and must be run from the
-repository root. It overwrites `program.hex`, so afterwards run
-`python3 sw/asm8.py sw/program.s program.hex` to restore the real program.
-
