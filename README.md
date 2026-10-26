@@ -142,8 +142,3 @@ Notes: the script needs Icarus Verilog (`iverilog`, `vvp`) and must be run from 
 repository root. It overwrites `program.hex`, so afterwards run
 `python3 sw/asm8.py sw/program.s program.hex` to restore the real program.
 
-## Limitations
-
-- No interrupts and no call/return instructions. Only the Z and C flags exist.
-- Pin assignments for a physical FPGA board are not included. The design was verified in
-  simulation and taken through Vivado implementation.
