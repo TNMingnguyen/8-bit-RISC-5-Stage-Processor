@@ -45,7 +45,7 @@ Overlapping instructions can cause problems, called hazards. This CPU fixes them
 | Group | Instructions | What they do |
 |---|---|---|
 | Arithmetic | `ADD`, `SUB`, `ADDI` | add and subtract, update Z and C |
-| Logic | `AND`, `OR`, `XOR` | bitwise operations, update Z |
+| Logic | `AND`, `OR`, `XOR` | bitwise operations, update Z (C is cleared to 0) |
 | Shift | `SHL`, `SHR` | shift by 1 bit, update Z and C |
 | Data | `LDI`, `LD`, `ST` | load a constant, read memory, write memory |
 | Control | `JMP`, `BZ`, `BNZ` | jump, jump if zero, jump if not zero |
@@ -73,6 +73,8 @@ sw/    Python tools
        asm8.py               assembler: program.s -> program.hex
        iss.py                simple reference model of the CPU
        random_test.py        random test: Verilog CPU vs reference model
+constrs/
+       risc8.xdc             clock constraint for synthesis and implementation
 program.hex                  the program loaded into the CPU
 ```
 
@@ -81,12 +83,14 @@ program.hex                  the program loaded into the CPU
 1. Create an RTL project. Use a folder path without spaces.
 2. Add the files in `rtl/` as Design Sources. The top module is `risc8_5stage_core`.
 3. Add `tb/tb_risc8_5stage.v` as a Simulation Source and set it as the simulation top.
-4. Add `program.hex` as a Simulation Source.
-5. Click **Run Behavioral Simulation**.
+4. Add `program.hex` as both a Design Source and a Simulation Source (synthesis and
+   simulation both read it with `$readmemh`).
+5. Add `constrs/risc8.xdc` as a Constraints file (needed for synthesis and implementation).
+6. Click **Run Behavioral Simulation**.
 
 The console ends with `*** ALL TESTS PASSED ***` after 545 ns.
 
-For synthesis and implementation, also add a constraints file (`.xdc`) with the clock:
+The constraints file `constrs/risc8.xdc` contains the clock definition:
 
 ```
 create_clock -period 10.000 -name clk [get_ports clk]
@@ -128,5 +132,7 @@ CPU against a reference model:
 python3 sw/random_test.py 500
 ```
 
-Result: `500 random programs: RTL matches golden model in all cases`.
+Note: this script overwrites `program.hex` with random programs. Afterwards, rebuild it with
+`python3 sw/asm8.py sw/program.s program.hex` before running the main testbench again.
 
+Result: `500 random programs: RTL matches golden model in all cases`.
